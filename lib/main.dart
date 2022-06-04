@@ -96,7 +96,11 @@ int _messageCount = 0;
 String constructFCMPayload(String? token) {
   _messageCount++;
   return jsonEncode({
-    'to': token,
+    'registration_ids': [
+      token,
+      'da07LmIFTry9I0IzZ4pZLF:APA91bHr8K_dwgGH50jD5upvUntodKCm_N2JwQKyttH7ktV3rHNesI4yoQDMS5kfw-Q5PhOINWqQWpw7AKDdLre0U5NH3aY_EBm7Hn36axkHNmOXJ4I6Wfe7CKi8vr3opUeD-UUTF5DX'
+    ],
+    // 'to': 'fcm_test',
     'data': {
       'via': 'FlutterFire Cloud Messaging!!!',
       'count': _messageCount.toString(),
@@ -105,6 +109,7 @@ String constructFCMPayload(String? token) {
       'title': 'Hello FlutterFire!',
       'body': 'This notification (#$_messageCount) was created via FCM!',
     },
+    'topic': 'fcm_test'
   });
 }
 

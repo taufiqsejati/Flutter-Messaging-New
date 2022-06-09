@@ -7,6 +7,7 @@ import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging_example/services/local_notification_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -125,48 +126,86 @@ class _Application extends State<Application> {
   @override
   void initState() {
     super.initState();
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((RemoteMessage? message) {
-      if (message != null) {
-        Navigator.pushNamed(
-          context,
-          '/message',
-          arguments: MessageArguments(message, true),
-        );
+
+    LocalNotificationService.initialize(context);
+
+    // FirebaseMessaging.instance.getInitialMessage().then((message) {
+    //   if (message != null) {
+    //     final routeFromMessage = message.data['route'];
+    //     debugPrint('$message');
+
+    //     // print(routeFromMessage);
+    //     // Navigator.of(context).pushNamed(routeFromMessage);
+
+    //     Navigator.pushNamed(
+    //       context,
+    //       routeFromMessage,
+    //       arguments: MessageArguments(message, true),
+    //     );
+    //   }
+    // });
+    // FirebaseMessaging.instance
+    //     .getInitialMessage()
+    //     .then((RemoteMessage? message) {
+    //   if (message != null) {
+    //     debugPrint('gara2 ini ternyata?');
+    //     Navigator.pushNamed(
+    //       context,
+    //       '/message',
+    //       arguments: MessageArguments(message, true),
+    //     );
+    //   }
+    // });
+
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   RemoteNotification? notification = message.notification;
+    //   AndroidNotification? android = message.notification?.android;
+    //   if (notification != null && android != null && !kIsWeb) {
+    //     flutterLocalNotificationsPlugin.show(
+    //       notification.hashCode,
+    //       notification.title,
+    //       notification.body,
+    //       NotificationDetails(
+    //         android: AndroidNotificationDetails(
+    //           channel.id,
+    //           channel.name,
+    //           channel.description,
+    //           // TODO add a proper drawable resource to android, for now using
+    //           //      one that already exists in example app.
+    //           icon: 'launch_background',
+    //         ),
+    //       ),
+    //     );
+    //   }
+    // });
+
+    FirebaseMessaging.onMessage.listen((message) {
+      if (message.notification != null) {
+        print(message.notification!.body);
+        print(message.notification!.title);
       }
+      LocalNotificationService.display(message);
     });
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      if (notification != null && android != null && !kIsWeb) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channel.description,
-              // TODO add a proper drawable resource to android, for now using
-              //      one that already exists in example app.
-              icon: 'launch_background',
-            ),
-          ),
-        );
-      }
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
-      Navigator.pushNamed(
-        context,
-        '/message',
-        arguments: MessageArguments(message, true),
-      );
-    });
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   print('A new onMessageOpenedApp event was published!');
+    //   Navigator.pushNamed(
+    //     context,
+    //     '/message',
+    //     arguments: MessageArguments(message, true),
+    //   );
+    // });
+    // FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    //   final routeFromMessage = message.data['route'];
+    //   debugPrint('$message');
+    //   // print(routeFromMessage);
+    //   // Navigator.of(context).pushNamed(routeFromMessage);
+    //   Navigator.pushNamed(
+    //     context,
+    //     routeFromMessage,
+    //     arguments: MessageArguments(message, true),
+    //   );
+    // });
   }
 
   Future<void> sendPushMessage() async {
@@ -193,25 +232,69 @@ class _Application extends State<Application> {
 
   Future<void> onActionSelected(String value) async {
     switch (value) {
-      case 'subscribe':
+      case 'subscribe Anto':
         {
           print(
-            'FlutterFire Messaging Example: Subscribing to topic "fcm_test".',
+            'FlutterFire Messaging Example: Subscribing to topic "anto".',
           );
-          await FirebaseMessaging.instance.subscribeToTopic('fcm_test');
+          await FirebaseMessaging.instance.subscribeToTopic('anto');
           print(
-            'FlutterFire Messaging Example: Subscribing to topic "fcm_test" successful.',
+            'FlutterFire Messaging Example: Subscribing to topic "anto" successful.',
           );
         }
         break;
-      case 'unsubscribe':
+      case 'unsubscribe Anto':
         {
           print(
-            'FlutterFire Messaging Example: Unsubscribing from topic "fcm_test".',
+            'FlutterFire Messaging Example: Unsubscribing from topic "anto".',
           );
-          await FirebaseMessaging.instance.unsubscribeFromTopic('fcm_test');
+          await FirebaseMessaging.instance.unsubscribeFromTopic('anto');
           print(
-            'FlutterFire Messaging Example: Unsubscribing from topic "fcm_test" successful.',
+            'FlutterFire Messaging Example: Unsubscribing from topic "anto" successful.',
+          );
+        }
+        break;
+      case 'subscribe Budi':
+        {
+          print(
+            'FlutterFire Messaging Example: Subscribing to topic "budi".',
+          );
+          await FirebaseMessaging.instance.subscribeToTopic('budi');
+          print(
+            'FlutterFire Messaging Example: Subscribing to topic "budi" successful.',
+          );
+        }
+        break;
+      case 'unsubscribe Budi':
+        {
+          print(
+            'FlutterFire Messaging Example: Unsubscribing from topic "budi".',
+          );
+          await FirebaseMessaging.instance.unsubscribeFromTopic('budi');
+          print(
+            'FlutterFire Messaging Example: Unsubscribing from topic "budi" successful.',
+          );
+        }
+        break;
+      case 'subscribe Public':
+        {
+          print(
+            'FlutterFire Messaging Example: Subscribing to topic "public".',
+          );
+          await FirebaseMessaging.instance.subscribeToTopic('public');
+          print(
+            'FlutterFire Messaging Example: Subscribing to topic "public" successful.',
+          );
+        }
+        break;
+      case 'unsubscribe Public':
+        {
+          print(
+            'FlutterFire Messaging Example: Unsubscribing from topic "public".',
+          );
+          await FirebaseMessaging.instance.unsubscribeFromTopic('public');
+          print(
+            'FlutterFire Messaging Example: Unsubscribing from topic "public" successful.',
           );
         }
         break;
@@ -245,17 +328,33 @@ class _Application extends State<Application> {
             itemBuilder: (BuildContext context) {
               return [
                 const PopupMenuItem(
-                  value: 'subscribe',
-                  child: Text('Subscribe to topic'),
+                  value: 'subscribe Public',
+                  child: Text('Subscribe to Public'),
                 ),
                 const PopupMenuItem(
-                  value: 'unsubscribe',
-                  child: Text('Unsubscribe to topic'),
+                  value: 'unsubscribe Public',
+                  child: Text('Unsubscribe to Public'),
                 ),
                 const PopupMenuItem(
-                  value: 'get_apns_token',
-                  child: Text('Get APNs token (Apple only)'),
+                  value: 'subscribe Budi',
+                  child: Text('Subscribe to Budi'),
                 ),
+                const PopupMenuItem(
+                  value: 'unsubscribe Budi',
+                  child: Text('Unsubscribe to Budi'),
+                ),
+                const PopupMenuItem(
+                  value: 'subscribe Anto',
+                  child: Text('Subscribe to Anto'),
+                ),
+                const PopupMenuItem(
+                  value: 'unsubscribe Anto',
+                  child: Text('Unsubscribe to Anto'),
+                ),
+                // const PopupMenuItem(
+                //   value: 'get_apns_token',
+                //   child: Text('Get APNs token (Apple only)'),
+                // ),
               ];
             },
           ),
@@ -281,7 +380,7 @@ class _Application extends State<Application> {
                     : Text(token, style: const TextStyle(fontSize: 12));
               }),
             ),
-            MetaCard('Message Stream', MessageList()),
+            // MetaCard('Message Stream', MessageList()),
           ],
         ),
       ),

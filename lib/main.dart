@@ -105,12 +105,12 @@ String constructFCMPayload(String? token) {
     'data': {
       'via': 'FlutterFire Cloud Messaging!!!',
       'count': _messageCount.toString(),
+      'route': '/message'
     },
     'notification': {
       'title': 'Hello FlutterFire!',
       'body': 'This notification (#$_messageCount) was created via FCM!',
     },
-    'topic': 'fcm_test'
   });
 }
 
@@ -129,55 +129,15 @@ class _Application extends State<Application> {
 
     LocalNotificationService.initialize(context);
 
-    // FirebaseMessaging.instance.getInitialMessage().then((message) {
-    //   if (message != null) {
-    //     final routeFromMessage = message.data['route'];
-    //     debugPrint('$message');
-
-    //     // print(routeFromMessage);
-    //     // Navigator.of(context).pushNamed(routeFromMessage);
-
-    //     Navigator.pushNamed(
-    //       context,
-    //       routeFromMessage,
-    //       arguments: MessageArguments(message, true),
-    //     );
-    //   }
-    // });
-    // FirebaseMessaging.instance
-    //     .getInitialMessage()
-    //     .then((RemoteMessage? message) {
-    //   if (message != null) {
-    //     debugPrint('gara2 ini ternyata?');
-    //     Navigator.pushNamed(
-    //       context,
-    //       '/message',
-    //       arguments: MessageArguments(message, true),
-    //     );
-    //   }
-    // });
-
-    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //   RemoteNotification? notification = message.notification;
-    //   AndroidNotification? android = message.notification?.android;
-    //   if (notification != null && android != null && !kIsWeb) {
-    //     flutterLocalNotificationsPlugin.show(
-    //       notification.hashCode,
-    //       notification.title,
-    //       notification.body,
-    //       NotificationDetails(
-    //         android: AndroidNotificationDetails(
-    //           channel.id,
-    //           channel.name,
-    //           channel.description,
-    //           // TODO add a proper drawable resource to android, for now using
-    //           //      one that already exists in example app.
-    //           icon: 'launch_background',
-    //         ),
-    //       ),
-    //     );
-    //   }
-    // });
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        Navigator.pushNamed(
+          context,
+          message.data['route'],
+          arguments: MessageArguments(message, true),
+        );
+      }
+    });
 
     FirebaseMessaging.onMessage.listen((message) {
       if (message.notification != null) {
@@ -187,25 +147,13 @@ class _Application extends State<Application> {
       LocalNotificationService.display(message);
     });
 
-    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    //   print('A new onMessageOpenedApp event was published!');
-    //   Navigator.pushNamed(
-    //     context,
-    //     '/message',
-    //     arguments: MessageArguments(message, true),
-    //   );
-    // });
-    // FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    //   final routeFromMessage = message.data['route'];
-    //   debugPrint('$message');
-    //   // print(routeFromMessage);
-    //   // Navigator.of(context).pushNamed(routeFromMessage);
-    //   Navigator.pushNamed(
-    //     context,
-    //     routeFromMessage,
-    //     arguments: MessageArguments(message, true),
-    //   );
-    // });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      Navigator.pushNamed(
+        context,
+        message.data['route'],
+        arguments: MessageArguments(message, true),
+      );
+    });
   }
 
   Future<void> sendPushMessage() async {
@@ -380,7 +328,7 @@ class _Application extends State<Application> {
                     : Text(token, style: const TextStyle(fontSize: 12));
               }),
             ),
-            // MetaCard('Message Stream', MessageList()),
+            MetaCard('Message Stream', MessageList()),
           ],
         ),
       ),

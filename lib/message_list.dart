@@ -42,7 +42,7 @@ class _MessageList extends State<MessageList> {
             subtitle:
                 Text(message.sentTime?.toString() ?? DateTime.now().toString()),
             onTap: () => Navigator.pushNamed(context, '/message',
-                arguments: MessageArgumentss(message, false)),
+                arguments: MessageArguments(message, false)),
           );
         });
   }
